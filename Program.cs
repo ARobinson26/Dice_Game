@@ -12,18 +12,20 @@ namespace Dice_Game
         /// <summary>
         /// Registers a user and validates they are authorised.
         /// </summary>
-        /// <param name="user">Number of the user being registered, either player '1' or '2'.</param>
+        /// <param name="playerNo">Number of the user being registered, either player '1' or '2'.</param>
         /// <returns>Returns the username of authorised player.</returns>
-        static string Registration(int user)
+        static string Registration(int playerNo)
         {
             string player;
-            Console.WriteLine("Player " + user + " Username:");
+            Console.WriteLine("Player " + playerNo + " Username:");
             player = Console.ReadLine();
+
             while (player.ToUpper() != "AARON" && player.ToUpper() != "TONY")
             {
                 Console.WriteLine("Unauthorised. Re-enter username.");
                 player = Console.ReadLine();
             }
+
             return player;
         }
 
@@ -74,8 +76,6 @@ namespace Dice_Game
             Console.ReadLine();
             Console.Clear();
             return rollTotal;
-            
-                        
 
         }
 
@@ -98,9 +98,10 @@ namespace Dice_Game
         /// <summary>
         /// Main program that calls the procedures.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">???</param>
         static void Main(string[] args)
         {
+
             Console.Title = "Dice Game";
             string playerOne;
             string playerTwo;
@@ -121,7 +122,7 @@ namespace Dice_Game
                 playerTwoScore += Round(playerTwo);
             }
             
-            //Runs the round procdure indefinitely until a winner is found.
+            //Tie-break - runs the round procdure indefinitely until a winner is found.
             while (playerOneScore == playerTwoScore)
             {
                 Console.WriteLine("Tie-Break! Sudden Death!");
@@ -146,15 +147,6 @@ namespace Dice_Game
             }
            
             Console.ReadLine();
-
-
-
-
-
-
-
-
-
 
         }
     }
