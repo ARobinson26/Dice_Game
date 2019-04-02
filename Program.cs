@@ -54,6 +54,10 @@ namespace Dice_Game
             else
             {
                 rollTotal -= 5;
+                if (rollTotal < 0)
+                {
+                    rollTotal = 0;
+                }
             }
 
             if (roll1 == roll2)
@@ -91,8 +95,13 @@ namespace Dice_Game
             Console.Clear();
         }
 
+        /// <summary>
+        /// Main program that calls the procedures.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
+            Console.Title = "Dice Game";
             string playerOne;
             string playerTwo;
 
@@ -104,7 +113,7 @@ namespace Dice_Game
 
             PlayerList(playerOne, playerTwo);
 
-
+            //Runs the round procedure 5 times.
             for (int i = 1; i < 6; i++ )
             {
                 Console.WriteLine("ROUND " + i);
@@ -112,6 +121,7 @@ namespace Dice_Game
                 playerTwoScore += Round(playerTwo);
             }
             
+            //Runs the round procdure indefinitely until a winner is found.
             while (playerOneScore == playerTwoScore)
             {
                 Console.WriteLine("Tie-Break! Sudden Death!");
@@ -119,9 +129,22 @@ namespace Dice_Game
                 playerTwoScore += Round(playerTwo);
             }
 
-            Console.WriteLine(playerOne + " " + playerOneScore);
-            Console.WriteLine(playerTwo + " " + playerTwoScore);
+            //Displays totals.
+            Console.WriteLine("The Winner is...");
 
+            if (playerOneScore > playerTwoScore)
+            {
+                Console.WriteLine(playerOne + "! - " + playerOneScore);
+                Console.WriteLine();
+                Console.WriteLine(playerTwo + ", you came second with " + playerTwoScore);
+            }
+            else
+            {
+                Console.WriteLine(playerTwo + "! - " + playerTwoScore);
+                Console.WriteLine();
+                Console.WriteLine(playerOne + ", you came second with " + playerOneScore);
+            }
+           
             Console.ReadLine();
 
 
