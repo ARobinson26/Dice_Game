@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace Dice_Game
 {
@@ -148,6 +149,39 @@ namespace Dice_Game
            
             Console.ReadLine();
 
+            string highScore1 = System.Configuration.ConfigurationManager.AppSettings["position1"];
+            string highScore2 = System.Configuration.ConfigurationManager.AppSettings["position2"];
+            string highScore3 = System.Configuration.ConfigurationManager.AppSettings["position3"];
+            string highScore4 = System.Configuration.ConfigurationManager.AppSettings["position4"];
+            string highScore5 = System.Configuration.ConfigurationManager.AppSettings["position5"];
+
+            if (playerOneScore > Convert.ToInt32(highScore5))
+            {
+                if (playerOneScore > Convert.ToInt32(highScore4))
+                {
+                    if (playerOneScore > Convert.ToInt32(highScore3))
+                    {
+                        if (playerOneScore > Convert.ToInt32(highScore2))
+                        {
+                            if (playerOneScore > Convert.ToInt32(highScore1))
+                            {
+                                Console.WriteLine("NEW HIGH SCORE!");
+                            }
+                            else Console.WriteLine("Second place high score!");
+                        }
+                        else Console.WriteLine("Third place high score!");
+                    }
+                    else Console.WriteLine("Fourth place high score!");
+                }
+                else Console.WriteLine("Fifth place high score!");
+            }
+            else Console.WriteLine("Sorry, no highscore");
+            
+            Console.ReadLine();
         }
+
+
+            
+        
     }
 }
