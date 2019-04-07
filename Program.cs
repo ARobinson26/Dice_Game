@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
+using System.IO;
 
 namespace Dice_Game
 {
@@ -97,12 +99,66 @@ namespace Dice_Game
         }
 
         /// <summary>
+        /// Creates/Updates the Scores.XML with winning player name and score.
+        /// </summary>
+        /// <param name="player">Winning Player</param>
+        /// <param name="score">Winning player's score</param>
+        static void RecordHighScores(string player, int score)
+        {
+            XDocument scoresXML;
+
+            //If the file exists, load it into 'scoresXML', otherwise create it.
+            if (File.Exists(@"C:\Users\aaronrobinson\source\repos\Dice_Game\Scores.xml"))
+            {
+                scoresXML = XDocument.Load(@"C:\Users\aaronrobinson\source\repos\Dice_Game\Scores.xml");
+            }
+            else
+            {
+                scoresXML = new XDocument(
+                new XElement("scores"));
+            }
+
+            //Adds the winning score into the XML file loaded/created above.
+            scoresXML.Root.Add(
+                    new XElement("entry",
+                        new XElement("player", player),
+                        new XElement("score", score)));
+
+            scoresXML.Save(@"C:\Users\aaronrobinson\source\repos\Dice_Game\Scores.xml");
+
+            Console.WriteLine("Press Enter to view the winners list!");
+            Console.ReadLine();
+
+            //Reads entries from XML and lists on screen.
+            var entries = from r in scoresXML.Descendants("entry")
+                          orderby r.Element("score").Value descending
+                          select new
+                          {
+                              Player = r.Element("player").Value,
+                              Score = r.Element("score").Value
+                          };
+
+            int i = 0;
+
+            foreach (var r in entries)
+            {
+                if (i < 5)
+                {
+                    Console.WriteLine(i+1 + ". " + r.Player + " " + r.Score);
+                    i++;
+                }
+                
+            }
+
+            Console.ReadLine();
+        }
+
+        /// <summary>
         /// Main program that calls the procedures.
         /// </summary>
         /// <param name="args">???</param>
         static void Main(string[] args)
         {
-
             Console.Title = "Dice Game";
             string playerOne;
             string playerTwo;
@@ -116,13 +172,13 @@ namespace Dice_Game
             PlayerList(playerOne, playerTwo);
 
             //Runs the round procedure 5 times.
-            for (int i = 1; i < 6; i++ )
+            for (int i = 1; i < 6; i++)
             {
                 Console.WriteLine("ROUND " + i);
                 playerOneScore += Round(playerOne);
                 playerTwoScore += Round(playerTwo);
             }
-            
+
             //Tie-break - runs the round procdure indefinitely until a winner is found.
             while (playerOneScore == playerTwoScore)
             {
@@ -139,49 +195,16 @@ namespace Dice_Game
                 Console.WriteLine(playerOne + "! - " + playerOneScore);
                 Console.WriteLine();
                 Console.WriteLine(playerTwo + ", you came second with " + playerTwoScore);
+                RecordHighScores(playerOne, playerOneScore);
             }
             else
             {
+                
                 Console.WriteLine(playerTwo + "! - " + playerTwoScore);
                 Console.WriteLine();
                 Console.WriteLine(playerOne + ", you came second with " + playerOneScore);
+                RecordHighScores(playerTwo, playerTwoScore);
             }
-           
-            Console.ReadLine();
-
-            string highScore1 = System.Configuration.ConfigurationManager.AppSettings["position1"];
-            string highScore2 = System.Configuration.ConfigurationManager.AppSettings["position2"];
-            string highScore3 = System.Configuration.ConfigurationManager.AppSettings["position3"];
-            string highScore4 = System.Configuration.ConfigurationManager.AppSettings["position4"];
-            string highScore5 = System.Configuration.ConfigurationManager.AppSettings["position5"];
-
-            if (playerOneScore > Convert.ToInt32(highScore5))
-            {
-                if (playerOneScore > Convert.ToInt32(highScore4))
-                {
-                    if (playerOneScore > Convert.ToInt32(highScore3))
-                    {
-                        if (playerOneScore > Convert.ToInt32(highScore2))
-                        {
-                            if (playerOneScore > Convert.ToInt32(highScore1))
-                            {
-                                Console.WriteLine("NEW HIGH SCORE!");
-                            }
-                            else Console.WriteLine("Second place high score!");
-                        }
-                        else Console.WriteLine("Third place high score!");
-                    }
-                    else Console.WriteLine("Fourth place high score!");
-                }
-                else Console.WriteLine("Fifth place high score!");
-            }
-            else Console.WriteLine("Sorry, no highscore");
-            
-            Console.ReadLine();
         }
-
-
-            
-        
     }
 }
