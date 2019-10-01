@@ -11,7 +11,6 @@ namespace Dice_Game
 {
     class Program
     {
-
         /// <summary>
         /// Registers a user and validates they are authorised.
         /// </summary>
@@ -131,7 +130,7 @@ namespace Dice_Game
 
             //Reads entries from XML and lists on screen.
             var entries = from r in scoresXML.Descendants("entry")
-                          orderby r.Element("score").Value descending
+                          orderby int.Parse(r.Element("score").Value) descending
                           select new
                           {
                               Player = r.Element("player").Value,
@@ -139,6 +138,9 @@ namespace Dice_Game
                           };
 
             int i = 0;
+
+            //Simon's smart git method
+            //var entries2 = scoresXML?.Root?.Descendants("entry")?.Select(x => new { Player = x.Element("player").Value, Score = x.Element("score").Value })?.OrderByDescending(x => x.Score).Take(5).ToList();
 
             foreach (var r in entries)
             {
@@ -187,7 +189,7 @@ namespace Dice_Game
                 playerTwoScore += Round(playerTwo);
             }
 
-            //Displays totals.
+            //Displays totals & runs RecordHighScores method.
             Console.WriteLine("The Winner is...");
 
             if (playerOneScore > playerTwoScore)
